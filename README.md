@@ -1,3 +1,7 @@
+Проверка
+
+
+
 # Описание работы на 14.04.2025, 23:59
 
 **Общая концепция:**
@@ -29,6 +33,113 @@
 6.  **Модульность:** Структурированный код для удобства поддержки.
 
 Это описание основано на анализе всех JS-модулей.
+
+---
+
+## Схема взаимодействия компонентов
+
+```mermaid
+classDiagram
+    direction LR
+
+    class Main {
+        +state: AppState
+        +initialize()
+        +handleRenderFileList(directory)
+        +handleLoadFile(filePath)
+        +handleSaveFile()
+        +handleDeleteFile()
+        +handleCreateFile()
+        +handleSendMessage()
+        +handleEditorInput()
+        +setupEventListeners()
+    }
+
+    class UI {
+        <<module>>
+        +showNotification(message, type, duration)
+        +renderFileList(directory, items, ...)
+        +updateEditorDisplay(fileData)
+        +clearEditor()
+        +updateFileStatus(statusText)
+        +displayAgentConfig(agentConfig, error)
+        +renderChatMessage(message, agentName)
+        +clearChatHistory()
+        +scrollChatHistory()
+        +updateButtonStates(filePath, isDirty, hasContent)
+        +setFileListLoading(isLoading, message)
+    }
+
+    class Chat {
+        <<module>>
+        -currentChatFile: object
+        -activeAgentConfig: object
+        +loadChat(chatFileData)
+        +clearCurrentChat()
+        +setActiveAgentConfig(config)
+        +sendMessage(messageText, apiKey, chatFilePath)
+        -saveCurrentChat(chatFilePath)
+        +isChatLoaded()
+        +getActiveAgentConfig()
+    }
+
+    class FileSystemAPI {
+        <<module>>
+        -getOpenDB()
+        +listFiles(directory)
+        +getFile(filePath)
+        +saveFile(filePath, content)
+        +deleteFile(filePath)
+    }
+
+    class DBManager {
+        <<module>>
+        -DB_NAME: string
+        -STORE_NAME: string
+        -db: IDBDatabase
+        +openDB()
+        +getDB()
+        -addInitialData(store)
+    }
+
+    class Utils {
+        <<module>>
+        +generateId()
+        +formatTimestamp(timestamp)
+        +getFileName(filePath)
+        +getDirectory(filePath)
+        +createBackupPath(fileData)
+    }
+
+    class IndexedDB {
+        <<database>>
+        +filesStore
+    }
+
+    class VseGPT_API {
+        <<external>>
+        +POST /v1/chat/completions
+    }
+
+    Main --> UI : Обновляет интерфейс
+    Main --> Chat : Управляет чатом
+    Main --> FileSystemAPI : Управляет файлами
+    Main --> Utils : Использует утилиты
+
+    Chat --> UI : Отображает сообщения, уведомления
+    Chat --> FileSystemAPI : Сохраняет/загружает историю чата
+    Chat --> Utils : Использует утилиты
+    Chat --> VseGPT_API : Отправляет запросы
+
+    FileSystemAPI --> DBManager : Получает доступ к БД
+    FileSystemAPI --> Utils : Использует утилиты
+
+    DBManager --> IndexedDB : Управляет хранилищем
+    DBManager --> Utils : Использует утилиты (для ID в initial data)
+
+    UI --> Utils : Использует утилиты (форматирование)
+
+```
 
 ---
 
