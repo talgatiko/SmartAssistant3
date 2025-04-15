@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Assistant (Modular)</title>
+    <!-- Link external CSS file -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Smart Assistant (Modular)</h1>
+            <div id="notifications" class="notifications"></div>
+        </header>
+
+        <main class="app-main">
+            <aside class="sidebar file-explorer">
+                <h2>Файловый менеджер</h2>
+                <div class="directory-controls">
+                    <button id="btn-root" title="Перейти в корень">/ Корневая</button>
+                    <button id="btn-create-file" title="Создать файл в текущей папке">+</button>
+                 </div>
+                 <div id="current-path" style="word-break: break-all; font-weight: bold; margin: 5px 0; font-size: 0.9em;">/</div>
+                <ul id="file-list">
+                    <!-- Список файлов будет динамически загружен js/main.js -->
+                    <li class="loading">Загрузка...</li>
+                </ul>
+            </aside>
+
+            <section class="content-area">
+                <div id="chat-interface" class="chat-interface">
+                    <h2>Чат с Агентом (VseGPT API)</h2>
+                    <div id="chat-history">
+                        <!-- История чата будет динамически загружена -->
+                        <div class="chat-message agent">
+                            <div class="sender">Агент</div>
+                            <div>Привет! Выберите файл чата в /chats/ или создайте новый. Затем введите ваше сообщение.</div>
+                            <div class="timestamp"></div>
+                        </div>
+                     </div>
+                     <!-- Область ввода перенесена в file-viewer -->
+                </div>
+
+                <div id="file-viewer" class="file-viewer">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                       <h2 style="margin: 0;">Просмотр / Редактирование</h2>
+                       <span id="file-status"></span>
+                   </div>
+                    <div id="file-info">Выберите файл для просмотра или введите сообщение</div>
+                    <textarea id="file-content-editor" placeholder="Содержимое файла или введите сообщение для чата..."></textarea>
+                    <!-- Объединенная область ввода и действий -->
+                    <div class="combined-input-actions">
+                         <button id="btn-send-message">Отправить</button>
+                         <button id="btn-save-file">Сохранить</button>
+                         <button id="btn-delete-file" disabled>Удалить</button> <!-- Оставим Удалить отключенным по умолчанию -->
+                    </div>
+                     <div id="agent-config-display" class="config-display" style="display: none;">
+                        <h3>Конфигурация Активного Агента (из файла):</h3>
+                        <pre id="agent-config-data"></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer removed -->
+    </div>
+
+    <!-- Import the main JavaScript module -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
